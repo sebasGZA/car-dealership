@@ -10,7 +10,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
-import { Car } from './cars.interface';
+import { Car } from './interfaces/cars.interface';
+import { CreateCarDto } from './dto/create-car.dto';
 
 @Controller('cars')
 export class CarsController {
@@ -30,8 +31,8 @@ export class CarsController {
   }
 
   @Post()
-  postCar(@Body() body: any) {
-    return this.carsService.createCar(body);
+  postCar(@Body() createCarDto: CreateCarDto) {
+    return this.carsService.createCar(createCarDto);
   }
 
   @Patch(':id')
