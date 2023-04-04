@@ -24,28 +24,28 @@ export class CarsService {
     },
   ];
 
-  findAll() {
+  findAll(): Car[] {
     return this.cars;
   }
 
-  findOneById(id: string) {
+  findOneById(id: string): Car {
     return this.cars.find((car) => car.id === id);
   }
 
-  createCar(car: any) {
-    car.id = uuid();
-    this.cars.push(car);
-    return car;
+  createCar(createCarDto: CreateCarDto): Car {
+    const newCar: Car = { ...createCarDto, id: uuid() };
+    this.cars.push(newCar);
+    return newCar;
   }
 
-  updateCar(id: string, car: any) {
+  updateCar(id: string, car: any): Car {
     const carDb = this.findOneById(id);
     if (!carDb) throw new NotFoundException(`Car with id: ${id} not found`);
     car.id = uuid();
     return car;
   }
 
-  deleteCar(id: string) {
+  deleteCar(id: string): Car {
     const car = this.findOneById(id);
     if (!car) throw new NotFoundException(`Car with id: ${id} not found`);
     this.cars = this.cars.filter((car) => car.id !== id);
