@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import { Car } from './interfaces/cars.interface';
 import { CreateCarDto } from './dto/create-car.dto';
+import { UpdateCarDto } from './dto/update-car.dto';
 
 @Injectable()
 export class CarsService {
@@ -29,7 +30,9 @@ export class CarsService {
   }
 
   findOneById(id: string): Car {
-    return this.cars.find((car) => car.id === id);
+    const carDb = this.cars.find((car) => car.id === id);
+    if (!carDb) throw new NotFoundException(`Car with id ${id} not found`);
+    return carDb;
   }
 
   createCar(createCarDto: CreateCarDto): Car {
@@ -38,11 +41,22 @@ export class CarsService {
     return newCar;
   }
 
-  updateCar(id: string, car: any): Car {
-    const carDb = this.findOneById(id);
-    if (!carDb) throw new NotFoundException(`Car with id: ${id} not found`);
-    car.id = uuid();
-    return car;
+  updateCar(id: string, updateCarDto: UpdateCarDto): Car {
+    let carDb: Car = this.findOneById(id);
+
+    this.cars = this.cars.map((car) => {
+      if (car.id === id) {
+        carDb = {
+          ...carDb,
+          ...updateCarDto,
+          id,
+        };
+        return carDb;
+      }
+      return car;
+    });
+
+    return carDb;
   }
 
   deleteCar(id: string): Car {
