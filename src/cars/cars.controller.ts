@@ -1,16 +1,17 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { CarsService } from './cars.service';
 
 @Controller('cars')
 export class CarsController {
-  private cars: string[] = ['Toyota', 'Mazda', 'Kia'];
+  constructor(private readonly carsService: CarsService) {}
 
   @Get()
   getAllCars(): string[] {
-    return this.cars;
+    return this.carsService.findAll();
   }
 
   @Get(':id')
   getCarById(@Param('id') id: number): string | null {
-    return this.cars[id] ? this.cars[id] : null;
+    return this.carsService.findOneById(id);
   }
 }
