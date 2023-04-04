@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Car } from './cars.interface';
 import { v4 as uuid } from 'uuid';
+
+import { Car } from './cars.interface';
 
 @Injectable()
 export class CarsService {
@@ -40,7 +41,6 @@ export class CarsService {
     const carDb = this.findOneById(id);
     if (!carDb) throw new NotFoundException(`Car with id: ${id} not found`);
     car.id = uuid();
-    // this.cars[id - 1] = car;
     return car;
   }
 
